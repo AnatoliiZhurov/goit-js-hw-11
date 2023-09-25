@@ -44,7 +44,7 @@ async function submitHandler(evt) {
 }
 
 async function loadMore() {
-  moreReq = JSON.parse(localStorage.getItem(LOCAL_KEY));
+  const moreReq = JSON.parse(localStorage.getItem(LOCAL_KEY));
   try {
     const dataCards = await fetchPix(moreReq);
     const create = await createMarkup(dataCards);
