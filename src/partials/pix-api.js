@@ -15,7 +15,6 @@ async function fetchPix(requestWord) {
   };
 
   const resp = await axios.get(BASE_URL, { params });
-  console.log(resp);
 
   const totalHits = resp.data.totalHits;
 

@@ -16,7 +16,6 @@ const elements = {
   gallery: document.querySelector(`.gallery`),
   loadBtn: document.querySelector(`.load-more`),
 };
-console.log(elements);
 
 let galleryLightbox = new SimpleLightbox('.gallery img', {
   sourceAttr: `data-src`,
@@ -29,12 +28,15 @@ elements.form.addEventListener(`submit`, submitHandler);
 
 async function submitHandler(evt) {
   evt.preventDefault();
+  pageNum = 1;
+  elements.loadBtn.style.display = `block`;
   requestWord = evt.target.elements.searchQuery.value;
 
   if (requestWord === '') {
     Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.'
     );
+    elements.loadBtn.style.display = `none`;
 
     return;
   }
@@ -61,6 +63,8 @@ async function submitHandler(evt) {
     );
   } finally {
     evt.target.elements.searchQuery.value = '';
+    let actualHits = elements.gallery.childElementCount;
+    checkCoutn(actualHits, countHits);
   }
 }
 
@@ -79,6 +83,10 @@ async function loadMore() {
     galleryLightbox.refresh();
 
     pageNum++;
+
+    let actualHits = elements.gallery.childElementCount;
+
+    checkCoutn(actualHits, countHits);
   } catch (err) {
     Notify.failure(
       "We're sorry, but you've reached the end of search results."
@@ -116,6 +124,12 @@ function createMarkup({ result }) {
                </div>`
     )
     .join(``);
+}
+
+function checkCoutn(firstVal, secVal) {
+  if (firstVal >= secVal) {
+    elements.loadBtn.style.display = `none`;
+  }
 }
 
 export { pageNum };
